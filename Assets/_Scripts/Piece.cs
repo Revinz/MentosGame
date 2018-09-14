@@ -12,6 +12,12 @@ public class Piece : MonoBehaviour, IPickupable {
         PLACED,
         HOVERING
     }
+
+    public enum Piece_Types
+    {
+        PRIMARY,
+        BLOCKER
+    }
     
     Piece_States pieceState;
     public Piece_States State
@@ -29,6 +35,11 @@ public class Piece : MonoBehaviour, IPickupable {
                 transform.position = new Vector3(transform.position.x, HoverHeight, transform.position.z);
             }
         } 
+    }
+
+    public Piece(Piece_Types type)
+    {
+
     }
 
     public void PickUp()

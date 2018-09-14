@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour {
-
-    int level = 0;
-    BoardTile[,] Board;
+public class LevelCreatorTool : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		
 	}
-
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
 }
