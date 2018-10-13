@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -111,31 +112,39 @@ public class WinChecker : MonoBehaviour {
     
     private void CheckForRedPiece(int row, int column, List<Tile> uncheckedList, List<Tile> checkedList, ref int counter)
     {
-        if (manager.BoardArray[row, column].piece == null)
-            return;
-
-        if (manager.BoardArray[row, column].piece.type == Piece.Piece_Types.RED)
+        try
         {
-            Tile TileWithRedPiece = board[row, column];
+            if (manager.BoardArray[row, column].piece == null)
+                return;
 
-            //Check if the tile is already in the checked list
-            foreach (Tile tile in checkedList)
+            if (manager.BoardArray[row, column].piece.type == Piece.Piece_Types.RED)
             {
-                if (tile == TileWithRedPiece)
-                    return;
+                Tile TileWithRedPiece = board[row, column];
+
+                //Check if the tile is already in the checked list
+                foreach (Tile tile in checkedList)
+                {
+                    if (tile == TileWithRedPiece)
+                        return;
+                }
+
+                //Check if the tile is already in the unchecked list
+                foreach (Tile tile in uncheckedList)
+                {
+                    if (tile == TileWithRedPiece)
+                        return;
+                }
+
+                //Else add it to the unchecked list
+                uncheckedList.Add(board[row, column]);
+                counter++;
             }
 
-            //Check if the tile is already in the unchecked list
-            foreach (Tile tile in uncheckedList)
-            {
-                if (tile == TileWithRedPiece)
-                    return;
-            }
+        } catch (Exception e)
+        {
 
-            //Else add it to the unchecked list
-            uncheckedList.Add(board[row, column]);
-            counter++;
         }
+        
     }
 
 }

@@ -47,4 +47,9 @@ public class BoardManager : MonoBehaviour
         }
 
     }
+
+    void ResetBoard()
+    {
+
+    }
 }
