@@ -9,7 +9,7 @@ public class DragAndDropController : MonoBehaviour {
     public LayerMask WhatIsDraggable = 1 << 11;
 
     private Vector3 offset = Vector3.zero;
-
+    private IDragAndDrop IDragAndDropComponent;
     private Vector3 PreviousTileLoc = Vector3.zero;
 
     public static bool PlayerMovesAllowed = true;
@@ -33,22 +33,23 @@ public class DragAndDropController : MonoBehaviour {
             {
                 Debug.Log("Piece hit");
                 //Debug.Log("Object clicked: " + hit.transform.parent.gameObject.name.ToString());
+
                 hitLoc = hit.point;
                 clickedObject = hit.transform.parent.gameObject;
 
-                clickedObject.GetComponent<Piece>().stateHandler.State = PieceStateHandler.Piece_States.HOVERING;
+                IDragAndDropComponent = clickedObject.GetComponent<IDragAndDrop>();
+                if (IDragAndDropComponent != null)
+                {
+                    IDragAndDropComponent.Select(); 
+                }
+                
             }
 
             else
             {
                 Debug.Log("nothing hit");
+                ResetClickedObject();
                 return;
-            }
-
-            //Calculate Offset
-            if (Physics.Raycast(ray, out hit, 100.0f, WhatIsBoard))
-            {
-                offset = clickedObject.transform.position - hit.point;
             }
 
         }
@@ -61,17 +62,16 @@ public class DragAndDropController : MonoBehaviour {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit; 
                 Debug.DrawRay(Input.mousePosition, ray.direction, Color.red, 0.5f);
+
+
                 if (Physics.Raycast(ray, out hit, 100.0f, WhatIsBoard))
                 {
-                    Debug.Log("Object Dragging: " + clickedObject.name.ToString());
-                    clickedObject.transform.position = new Vector3(hit.point.x + offset.x, Piece.HoverHeight, hit.point.z + offset.z);
 
-                    //Make the child objects stay at the proper location
-                    for (int i = 0; i < clickedObject.transform.childCount; i++)
+                    if (IDragAndDropComponent != null)
                     {
-                        clickedObject.transform.GetChild(i).transform.localPosition = new Vector3(0,0,0);
+                        IDragAndDropComponent.Drag(hit.point);
                     }
-                }
+               }
             }
         }
 
@@ -80,12 +80,13 @@ public class DragAndDropController : MonoBehaviour {
         {
             if (clickedObject != null)
             {
-                clickedObject.GetComponent<Piece>().stateHandler.State = PieceStateHandler.Piece_States.PLACED;
+                if (IDragAndDropComponent != null)
+                {
+                    IDragAndDropComponent.Drop();
+                }
             }
 
-            //Reset values
-            clickedObject = null;
-            PreviousTileLoc = Vector3.zero;
+            ResetClickedObject();
 
         }
     }
@@ -106,5 +107,12 @@ public class DragAndDropController : MonoBehaviour {
         else if (!place)
             tile.piece = null;
 
+    }
+
+    private void ResetClickedObject()
+    {
+        clickedObject = null;
+        PreviousTileLoc = Vector3.zero;
+        IDragAndDropComponent = null;
     }
 }

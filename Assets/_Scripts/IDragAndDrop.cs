@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDragAndDrop
 {
-    void Pickup();
-    void Drag();
+    void Select();
+    void Drag(Vector3 HitLocation);
     void Drop();
 }
