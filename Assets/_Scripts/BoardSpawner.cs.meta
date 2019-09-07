@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8c4efa39756424940a2904b108e8095c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TilePrefab: {fileID: 1928975311479324, guid: ccd05daebe47ad34d9a1c5ad0f610358,
+      type: 3}
+  - RedPiecePrefab: {fileID: 1640049987050514, guid: f440bc1fae0507d408a29265659217b6,
+      type: 3}
+  - YellowPiecePrefab: {fileID: 1426276701234794, guid: 0343c164c01bda546b20ffd1d0ad41d1,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -7,8 +8,8 @@ using UnityEngine;
 
 public class LevelCreatorTool : EditorWindow {
 
-
-    [MenuItem("Tools/Level Editor")]
+    
+    [MenuItem("Tools/Level Editor (OLD)")]
     private static void OpenLevelEditor()
     {
         EditorWindow.GetWindow(typeof(LevelCreatorTool));
@@ -55,7 +56,7 @@ public class LevelCreatorTool : EditorWindow {
             {
                 Vector3 tilePos = new Vector3(selectedTile.transform.position.x, selectedTile.transform.position.y + Piece.PlacedHeight, selectedTile.transform.position.z);
 
-                Piece piece = new Piece(tilePos, type);
+                Piece piece = new MoveablePiece(tilePos, type);
 
                 Debug.Log(selectedTile.piece);
                 SetSceneDirty();
@@ -135,4 +136,7 @@ public class LevelCreatorTool : EditorWindow {
     {
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
+    
 }
+
+*/

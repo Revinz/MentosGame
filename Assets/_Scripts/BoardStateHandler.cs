@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class BoardManager : MonoBehaviour
+public class BoardStateHandler
 {
     public int BoardHeight = 5;
     public int BoardWidth = 5;
@@ -22,9 +25,16 @@ public class BoardManager : MonoBehaviour
     {   
         
         ConvertBoardToMultiArray();
-
+        DragAndDropController.PlayerMovesAllowed = true;
         winchecker = new WinChecker(this);
+    }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetBoard();
+        }
     }
 
     public void CheckForWin(Piece piece)
@@ -42,14 +52,25 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < BoardWidth; j++) //Columns
             {
-                Board[i, j] = _board[(i * BoardWidth) + j].GetComponent<Tile>();
+                if (_board[(i * BoardWidth) + j] != null)
+                    Board[i, j] = _board[(i * BoardWidth) + j].GetComponent<Tile>();
             }
         }
 
     }
 
     void ResetBoard()
-    {
-
+    {       
+        Debug.Log("Resetting board");
+        //Deselect the current object to avoid crash
+        if (Application.isEditor)
+        {
+            Selection.objects = new UnityEngine.Object[0];
+        }
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+        DragAndDropController.PlayerMovesAllowed = true;
     }
+
+
 }

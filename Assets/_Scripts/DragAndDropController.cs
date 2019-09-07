@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragAndDrop : MonoBehaviour {
+public class DragAndDropController : MonoBehaviour {
 
     GameObject clickedObject;
     public LayerMask WhatIsBoard = 1 << 10;
@@ -12,27 +12,36 @@ public class DragAndDrop : MonoBehaviour {
 
     private Vector3 PreviousTileLoc = Vector3.zero;
 
+    public static bool PlayerMovesAllowed = true;
+
     private void Update()
     {
         // Left Click -- pick up the piece
         if (Input.GetMouseButtonDown(0)) //Left Click
         {
+            Debug.Log("Left Click clicked");
+
+            if (!PlayerMovesAllowed)
+                return;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             Vector3 hitLoc;
 
             //Find piece clicked
-            if (Physics.Raycast(ray, out hit, 100.0f, WhatIsDraggable))
+            if (Physics.Raycast(ray, out hit, 1000.0f, WhatIsDraggable))
             {
+                Debug.Log("Piece hit");
                 //Debug.Log("Object clicked: " + hit.transform.parent.gameObject.name.ToString());
                 hitLoc = hit.point;
                 clickedObject = hit.transform.parent.gameObject;
 
-                clickedObject.GetComponent<Piece>().State = Piece.Piece_States.HOVERING;
+                clickedObject.GetComponent<Piece>().stateHandler.State = PieceStateHandler.Piece_States.HOVERING;
             }
 
             else
             {
+                Debug.Log("nothing hit");
                 return;
             }
 
@@ -45,16 +54,16 @@ public class DragAndDrop : MonoBehaviour {
         }
 
         // Left Click Drag -- drag the piece around
-        if (Input.GetMouseButton(0))    
+        if (Input.GetMouseButton(0))        
         {
             if (clickedObject != null)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit; 
-
+                Debug.DrawRay(Input.mousePosition, ray.direction, Color.red, 0.5f);
                 if (Physics.Raycast(ray, out hit, 100.0f, WhatIsBoard))
                 {
-                    //Debug.Log("Object Dragging: " + clickedObject.name.ToString());
+                    Debug.Log("Object Dragging: " + clickedObject.name.ToString());
                     clickedObject.transform.position = new Vector3(hit.point.x + offset.x, Piece.HoverHeight, hit.point.z + offset.z);
 
                     //Make the child objects stay at the proper location
@@ -71,7 +80,7 @@ public class DragAndDrop : MonoBehaviour {
         {
             if (clickedObject != null)
             {
-                clickedObject.GetComponent<Piece>().State = Piece.Piece_States.PLACED;
+                clickedObject.GetComponent<Piece>().stateHandler.State = PieceStateHandler.Piece_States.PLACED;
             }
 
             //Reset values
@@ -98,5 +107,4 @@ public class DragAndDrop : MonoBehaviour {
             tile.piece = null;
 
     }
-
 }

@@ -3,23 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WinChecker : MonoBehaviour {
+public class WinChecker {
 
     int totalRedPiece = 0;
-    BoardManager manager;
+    BoardStateHandler boardStateHandler;
     Tile[,] board;
         
-    public WinChecker(BoardManager _manager)
+    public WinChecker(BoardStateHandler _boardStateHandler)
     {
-        manager = _manager;
-        board = manager.BoardArray;
+        boardStateHandler = _boardStateHandler;
+        board = boardStateHandler.BoardArray;
         //Count how many red pieces there are on the board
-        
         foreach (Tile tile in board)
         {
-
+            Debug.Log("count");
             if (tile.piece == null)
             {
+                
                 Debug.Log(tile.piece);
                 continue;
             }
@@ -35,7 +35,7 @@ public class WinChecker : MonoBehaviour {
 
         } 
 
-        Debug.Log("Total Red Pieces:" + totalRedPiece);
+        Debug.Log("Total Red Pieces:" + totalRedPiece); 
     }
         
     public void CheckForWin(Piece piece)
@@ -66,7 +66,7 @@ public class WinChecker : MonoBehaviour {
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {                 
-                    if (manager.BoardArray[i, j] == UncheckedList[0])
+                    if (boardStateHandler.BoardArray[i, j] == UncheckedList[0])
                     {
                         
                         CheckingTile = board[i, j];
@@ -104,7 +104,10 @@ public class WinChecker : MonoBehaviour {
         }
 
         if (RedTilesFound >= totalRedPiece)
+        {
             Debug.Log("A WIN HAS OCCURED!");
+            DragAndDropController.PlayerMovesAllowed = false;
+        }
         else
             Debug.Log("No Win :(");
 
@@ -114,10 +117,10 @@ public class WinChecker : MonoBehaviour {
     {
         try
         {
-            if (manager.BoardArray[row, column].piece == null)
+            if (boardStateHandler.BoardArray[row, column].piece == null)
                 return;
 
-            if (manager.BoardArray[row, column].piece.type == Piece.Piece_Types.RED)
+            if (boardStateHandler.BoardArray[row, column].piece.type == Piece.Piece_Types.RED)
             {
                 Tile TileWithRedPiece = board[row, column];
 
@@ -140,7 +143,7 @@ public class WinChecker : MonoBehaviour {
                 counter++;
             }
 
-        } catch (Exception e)
+        } catch (Exception)
         {
 
         }
